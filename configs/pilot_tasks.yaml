@@ -1,0 +1,7 @@
+schema_version: 1
+status: provisional_until_successful_demo_replay
+suite: libero_goal
+task_ids: []  # Populate from official task inventory; never guess IDs.
+trajectories_per_task: 5
+key_states_per_trajectory: 5
+phases: [free_motion, approach, pre_contact, manipulation, release]

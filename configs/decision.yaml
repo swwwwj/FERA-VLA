@@ -1,0 +1,8 @@
+schema_version: 1
+# Frozen before any pilot outcomes are collected.
+large_equivalent_min: 0.15
+small_changed_min: 0.10
+correlation_max: 0.60
+scorer_auroc_gain_min: 0.08
+calibration_quantiles: [0.25, 0.75]
+train_seeds: [17, 29, 43]
