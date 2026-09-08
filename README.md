@@ -6,12 +6,13 @@ No pilot findings or successful trajectories are claimed by this scaffold.
 
 ## Quick start
 
-Use an isolated Python environment, then:
+Install with CONDA_EXE=/path/to/conda bash scripts/install_sim.sh, then:
 
 ```bash
-python -m pip install -e .
-python -m unittest discover -s tests -v
-python scripts/00_check_system.py
+bash scripts/run.sh -m unittest discover -s tests -v
+bash scripts/run.sh scripts/00_check_system.py
+MUJOCO_EGL_DEVICE_ID=0 bash scripts/run.sh scripts/01_smoke_test_libero.py
+MUJOCO_EGL_DEVICE_ID=0 bash scripts/run.sh scripts/02_test_determinism.py
 ```
 
 LIBERO source: https://github.com/Lifelong-Robot-Learning/LIBERO
@@ -41,5 +42,5 @@ Do not interpret random-action smoke tests or unit tests as feasibility evidence
 Remote is the code authoring source; synchronize every coherent tested change to
 the local checkout and push that commit to GitHub. Credentials, raw demonstrations,
 rendered observations, checkpoints, third-party source and runtime logs are excluded.
-The sync script exports tracked remote HEAD, verifies file hashes, preserves local
+The sync script verifies a Git bundle of remote HEAD and preserves local
 uncommitted work by refusing to run when dirty, and pushes without force.

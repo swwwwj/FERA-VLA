@@ -1,5 +1,6 @@
 """Original LIBERO integration. Imports are lazy so core tests do not require a GPU."""
 import os
+import sys
 from pathlib import Path
 import numpy as np
 
@@ -9,6 +10,10 @@ def configure_paths():
     upstream = root / "third_party/LIBERO/libero/libero"
     if not upstream.is_dir():
         raise FileNotFoundError("Install pinned official LIBERO source first")
+    # Upstream setup.py misses namespace packages under modern setuptools.
+    source = str(root / "third_party/LIBERO")
+    if source not in sys.path:
+        sys.path.insert(0, source)
     cfg = root / ".local/libero"
     cfg.mkdir(parents=True, exist_ok=True)
     os.environ["LIBERO_CONFIG_PATH"] = str(cfg)

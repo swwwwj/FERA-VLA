@@ -20,6 +20,12 @@ class CoreTests(unittest.TestCase):
             self.assertTrue(np.all(np.abs(x.actions)<=1))
         self.assertEqual({k:sum(c.kind==k for c in a) for k in ("small","medium","sparse","temporal")},
                          dict(small=4,medium=4,sparse=4,temporal=4))
+    def test_gripper_boundary_sampling(self):
+        ref = np.zeros((32,7))
+        ref[:,6] = -1
+        candidates = sample(ref, -np.ones(7), np.ones(7), 42)
+        self.assertEqual(len(candidates),16)
+        self.assertTrue(all(np.all(np.abs(c.actions)<=1) for c in candidates))
     def test_sampler_bad_reference(self):
         with self.assertRaises(ValueError):
             sample(np.ones((8,7))*2, -np.ones(7), np.ones(7), 42)

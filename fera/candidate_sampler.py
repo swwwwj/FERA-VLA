@@ -23,7 +23,19 @@ def sample(reference, low, high, seed, count=16, small_sigma=.02,
         raise ValueError("Expected valid seven-dimensional bounds")
     if np.any(ref < lo) or np.any(ref > hi):
         raise ValueError("Reference exceeds controller bounds")
+    if min(small_sigma, medium_sigma, sparse_sigma) <= 0:
+        raise ValueError("Proposal scales must be positive")
     rng = np.random.default_rng(seed)
+    def bounded_noise(base, lower, upper, sigma):
+        # Coordinate rejection samples the truncated Gaussian without clipping;
+        # avoids exponential rejection when gripper remains at a hard boundary.
+        value = base + rng.normal(0, sigma, base.shape)
+        for _ in range(max_attempts):
+            bad = (value < lower) | (value > upper)
+            if not np.any(bad):
+                return value
+            value[bad] = (base + rng.normal(0, sigma, base.shape))[bad]
+        raise RuntimeError("Bounded Gaussian failed to converge")
     seen = {ref.tobytes()}
     result = []
     for kind in ("small", "medium", "sparse", "temporal"):
@@ -31,10 +43,10 @@ def sample(reference, low, high, seed, count=16, small_sigma=.02,
         for attempt in range(1, max_attempts + 1):
             value = ref.copy()
             if kind in ("small", "medium"):
-                value += rng.normal(0, small_sigma if kind == "small" else medium_sigma, ref.shape)
+                value = bounded_noise(ref, lo, hi, small_sigma if kind == "small" else medium_sigma)
             elif kind == "sparse":
                 dim = int(rng.integers(7))
-                value[:, dim] += rng.normal(0, sparse_sigma, len(ref))
+                value[:, dim] = bounded_noise(ref[:, dim], lo[dim], hi[dim], sparse_sigma)
             else:
                 # Local replacement / temporal gripper event, including constant references.
                 idx = int(rng.integers(len(ref)))
