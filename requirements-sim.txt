@@ -1,0 +1,13 @@
+# Minimal simulator subset; upstream lifelong-training stack is intentionally separate.
+# Preserve upstream robosuite and BDDL versions. Pin MuJoCo for robosuite 1.4 API.
+numpy==1.26.4
+PyYAML==6.0.2
+robosuite==1.4.0
+mujoco==2.3.7
+bddl==1.0.1
+gym==0.25.2
+easydict==1.13
+cloudpickle==2.2.1
+matplotlib==3.7.5
+opencv-python==4.8.1.78
+imageio==2.34.2
