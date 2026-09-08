@@ -1,5 +1,7 @@
 import hashlib
 import json
+import os
+import tempfile
 from pathlib import Path
 import numpy as np
 
@@ -29,5 +31,13 @@ def write_once(path, record):
     path = Path(path)
     path.parent.mkdir(parents=True, exist_ok=True)
     encoded = json.dumps(record, indent=2, allow_nan=False)
-    with path.open("x", encoding="utf-8") as handle:
-        handle.write(encoded + "\n")
+    fd, temporary = tempfile.mkstemp(prefix=".record-", dir=path.parent)
+    try:
+        with os.fdopen(fd, "w", encoding="utf-8") as handle:
+            handle.write(encoded + "\n")
+            handle.flush()
+            os.fsync(handle.fileno())
+        # Atomic publication with no overwrite, unlike os.replace.
+        os.link(temporary, path)
+    finally:
+        os.unlink(temporary)

@@ -11,6 +11,9 @@ if ($RemoteHost -notmatch '^[a-zA-Z0-9@._-]+$' -or $RemotePath -notmatch '^/[a-z
 function Assert-Exit { if ($LASTEXITCODE -ne 0) { throw "Command failed: $LASTEXITCODE" } }
 Push-Location (Split-Path $PSScriptRoot -Parent)
 try {
+    $branch = git branch --show-current
+    Assert-Exit
+    if ($branch -ne "main") { throw "Switch local checkout to main before synchronizing" }
     $dirty = git status --porcelain
     Assert-Exit
     if ($dirty) { throw "Local changes present; commit or preserve them before synchronization" }

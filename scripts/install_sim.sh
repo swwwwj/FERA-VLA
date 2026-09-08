@@ -3,6 +3,7 @@ set -euo pipefail
 cd "$(dirname "$0")/.."
 : "${CONDA_EXE:?Set CONDA_EXE to an existing conda executable}"
 export PYTHONNOUSERSITE=1
+mkdir -p outputs/logs
 if [[ ! -x .venv/bin/python ]]; then
   "$CONDA_EXE" create -y -p "$PWD/.venv" python=3.10 pip
 fi

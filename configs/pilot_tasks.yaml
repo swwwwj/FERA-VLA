@@ -1,7 +1,14 @@
 schema_version: 1
 status: provisional_until_successful_demo_replay
 suite: libero_goal
-task_ids: []  # Populate from official task inventory; never guess IDs.
+task_ids: [1, 0]
+tasks:
+  - task_id: 1
+    name: put_the_bowl_on_the_stove
+    mechanism: pick_place
+  - task_id: 0
+    name: open_the_middle_drawer_of_the_cabinet
+    mechanism: articulated_contact
 trajectories_per_task: 5
 key_states_per_trajectory: 5
 phases: [free_motion, approach, pre_contact, manipulation, release]
