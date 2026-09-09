@@ -6,9 +6,14 @@
 
 {
   "smoke_passed": true,
-  "determinism_passed": null,
+  "determinism_passed": true,
   "collection_approved": false,
-  "scientific_hypotheses_tested": false
+  "scientific_hypotheses_tested": false,
+  "state_max": 0.0,
+  "state_mse_max": 0.0,
+  "rgb_max": 0.0,
+  "success_agreement_min": 1.0,
+  "repeat_checks": 20
 }
 
 100步随机动作冒烟：libero_goal/0，双相机128×128，7维动作；已保存20帧并人工检查示例。随机动作未完成任务，不能视为专家成功轨迹。
